@@ -27,11 +27,12 @@ public class SkiMap {
     public void initializeMapGridValues(){
         if(getMapGrid()==null){
             try {
-                URL url = new URL("file:D:\\codingdojo\\SkiingChallenge\\map.txt");
+                String map = System.getProperty("user.dir");
+                map = map.replace("\\", "\\\\") + "\\map.txt";
+                URL url = new URL("file:"+map);
                 try (Scanner scanner = new Scanner(url.openStream())) {
                     initializeDimension(scanner);
                     mapGrid = new int[getMaxLatitude()][getMaxLongitude()];
-
                     for (int i = 0; i < getMaxLatitude(); i++) {
                         for (int j = 0; j < getMaxLongitude(); j++) {
                             mapGrid[i][j] = Integer.parseInt(scanner.next());
