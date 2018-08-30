@@ -92,46 +92,79 @@ public class SkiMap {
     public void findLongestPath() {
         for(int latitude = 0; latitude< getMaxLatitude(); latitude++){
             for(int longitude = 0; longitude< getMaxLongitude(); longitude++){
-                List<Integer> path;
-                if(canMoveEast(latitude, longitude)){
-                    path = new ArrayList<>();
-                    path.add(mapGrid[latitude][longitude]);
-                    moveEast(latitude, longitude, path);
-                }
-                if(canMoveSouth(latitude, longitude)){
-                    path = new ArrayList<>();
-                    path.add(mapGrid[latitude][longitude]);
-                    moveSouth(latitude, longitude, path);
-                }
-                if(canMoveWest(latitude, longitude)){
-                    path = new ArrayList<>();
-                    path.add(mapGrid[latitude][longitude]);
-                    moveWest(latitude, longitude, path);
-                }
-                if(canMoveNorth(latitude, longitude)){
-                    path = new ArrayList<>();
-                    path.add(mapGrid[latitude][longitude]);
-                    moveNorth(latitude, longitude, path);
-                }
+                List<Integer> path = new ArrayList<>();
+                findPaths(latitude, longitude, path);
             }
         }
         printLongestPath();
+    }
+
+    private void findPaths(int latitude, int longitude, List<Integer> path) {
+        List<Integer> newPath;
+        if(canMoveEast(latitude, longitude)){
+            newPath = new ArrayList<>();
+            processNewPath(latitude, longitude, path, newPath);
+            moveEast(latitude, longitude, newPath);
+        }
+        if(canMoveSouth(latitude, longitude)){
+            newPath = new ArrayList<>();
+            processNewPath(latitude, longitude, path, newPath);
+            moveSouth(latitude, longitude, newPath);
+        }
+        if(canMoveWest(latitude, longitude)){
+            newPath = new ArrayList<>();
+            processNewPath(latitude, longitude, path, newPath);
+            moveWest(latitude, longitude, newPath);
+        }
+        if(canMoveNorth(latitude, longitude)){
+            newPath = new ArrayList<>();
+            processNewPath(latitude, longitude, path, newPath);
+            moveNorth(latitude, longitude, newPath);
+        }
+    }
+
+    private void processNewPath(int latitude, int longitude, List<Integer> path, List<Integer> newPath) {
+        if(path.isEmpty()){
+            newPath.add(mapGrid[latitude][longitude]);
+        } else{
+            newPath.addAll(path);
+        }
     }
 
     private void printLongestPath() {
        System.out.println(getLongestPath());
     }
 
+    public boolean canMoveToMultiplePaths(int latitude, int longitude){
+        int count = 0;
+        if(canMoveEast(latitude, longitude)){
+            count++;
+        }
+        if(canMoveSouth(latitude, longitude)){
+            count++;
+        }
+        if(canMoveWest(latitude, longitude)){
+            count++;
+        }
+        if(canMoveNorth(latitude, longitude)){
+            count++;
+        }
+        return count>1;
+    }
+
     private void move(int latitude, int longitude, List<Integer> path) {
-        if(canMoveEast(latitude, longitude)) {
-            moveEast(latitude, longitude, path);
-        } else if(canMoveSouth(latitude, longitude)) {
-            moveSouth(latitude, longitude, path);
-        } else if(canMoveWest(latitude, longitude)) {
-            moveWest(latitude, longitude, path);
-        } else if(canMoveNorth(latitude, longitude)) {
-            moveNorth(latitude, longitude, path);
+        if(canMoveToMultiplePaths(latitude, longitude)){
+            findPaths(latitude, longitude, path);
         } else {
+            if(canMoveEast(latitude, longitude)) {
+                moveEast(latitude, longitude, path);
+            } else if(canMoveSouth(latitude, longitude)) {
+                moveSouth(latitude, longitude, path);
+            } else if(canMoveWest(latitude, longitude)) {
+                moveWest(latitude, longitude, path);
+            } else if(canMoveNorth(latitude, longitude)) {
+                moveNorth(latitude, longitude, path);
+            }
             checkAndReplaceIfLongestPath(path);
         }
     }
