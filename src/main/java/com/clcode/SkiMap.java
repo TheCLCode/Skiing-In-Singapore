@@ -218,7 +218,7 @@ public class SkiMap {
     }
 
     public boolean canMoveWest(int latitude, int longitude){
-        return longitude > 0 && longitude <= (getMaxLongitude() - 1) && mapGrid[latitude][longitude] > mapGrid[latitude][longitude - 1];
+        return longitude > 0 && mapGrid[latitude][longitude] > mapGrid[latitude][longitude - 1];
     }
 
     public boolean canMoveNorth(int latitude, int longitude){
