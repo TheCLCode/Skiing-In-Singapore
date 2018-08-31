@@ -45,7 +45,7 @@ public class SkiMap {
             catch (IOException e) {
                 e.printStackTrace();
             }
-        } else{
+        } else {
             for (int i = 0; i < getMaxLatitude(); i++) {
                 for (int j = 0; j < getMaxLongitude(); j++) {
                     System.out.print(mapGrid[i][j] + " ");
@@ -164,8 +164,9 @@ public class SkiMap {
                 moveWest(latitude, longitude, path);
             } else if(canMoveNorth(latitude, longitude)) {
                 moveNorth(latitude, longitude, path);
+            } else {
+                checkAndReplaceIfLongestPath(path);
             }
-            checkAndReplaceIfLongestPath(path);
         }
     }
 
@@ -213,7 +214,7 @@ public class SkiMap {
     }
 
     public boolean canMoveEast(int latitude, int longitude){
-        return longitude < (getMaxLatitude() - 1) && mapGrid[latitude][longitude] > mapGrid[latitude][longitude + 1];
+        return longitude < (getMaxLongitude() - 1) && mapGrid[latitude][longitude] > mapGrid[latitude][longitude + 1];
     }
 
     public boolean canMoveWest(int latitude, int longitude){
